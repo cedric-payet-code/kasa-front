@@ -10,7 +10,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Kasa",
+  title: {
+    default: "Kasa",
+    template: "%s | Kasa",
+  },
   description: "Location d'appartements et de maisons entre particuliers.",
 };
 

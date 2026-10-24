@@ -1,3 +1,4 @@
+import { cache } from "react";
 import {
   PropertyDetailSchema,
   PropertyListSchema,
@@ -17,3 +18,18 @@ export function getPropertyById(id: string): Promise<PropertyDetail> {
     cache: "no-store",
   });
 }
+
+/**
+ * Récupère le détail d'une propriété à partir de son slug.
+ * L'API ne permet de chercher que par id : on retrouve d'abord l'id dans la liste.
+ * Renvoie `null` si aucune propriété ne correspond.
+ *
+ * `cache` (React) évite de refaire les appels quand la fonction est utilisée
+ * plusieurs fois pendant le même rendu (ex. generateMetadata + la page).
+ */
+export const getPropertyBySlug = cache(async (slug: string): Promise<PropertyDetail | null> => {
+  const properties = await getProperties();
+  const match = properties.find((property) => property.slug === slug);
+  if (!match) return null;
+  return getPropertyById(match.id);
+});
