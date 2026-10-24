@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import FavoriteButton from "@/components/favorites/FavoriteButton";
 import type { Property } from "@/lib/schemas/property";
 
 type PropertyCardProps = {
@@ -10,7 +11,7 @@ type PropertyCardProps = {
 
 /** Carte d'un logement dans la liste (composant « Card propriété » de la maquette). */
 export default function PropertyCard({ property, preload = false }: PropertyCardProps) {
-  const { slug, title, location, cover, price_per_night } = property;
+  const { id, slug, title, location, cover, price_per_night } = property;
 
   return (
     <article className="group relative flex h-[552px] flex-col overflow-hidden rounded-[10px] bg-blanc">
@@ -25,6 +26,12 @@ export default function PropertyCard({ property, preload = false }: PropertyCard
             preload={preload}
           />
         )}
+        {/* z-10 : le bouton passe au-dessus du lien qui couvre toute la carte */}
+        <FavoriteButton
+          propertyId={id}
+          propertyTitle={title}
+          className="absolute top-4 right-4 z-10"
+        />
       </div>
 
       <div className="flex flex-1 flex-col justify-between px-6 pt-4 pb-6">
