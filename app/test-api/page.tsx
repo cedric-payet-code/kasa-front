@@ -10,7 +10,7 @@ export default async function TestApiPage() {
   const first = properties[0] ? await getPropertyById(properties[0].id) : null;
 
   return (
-    <main className="mx-auto max-w-5xl p-8 font-mono text-sm">
+    <div className="mx-auto max-w-5xl p-8 font-mono text-sm">
       <h1 className="mb-6 text-2xl font-bold">Test API : {properties.length} propriétés</h1>
 
       <table className="mb-10 w-full border-collapse">
@@ -44,6 +44,6 @@ export default async function TestApiPage() {
           </pre>
         </>
       )}
-    </main>
+    </div>
   );
 }
