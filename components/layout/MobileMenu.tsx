@@ -40,7 +40,7 @@ export default function MobileMenu() {
   return (
     <div className="flex items-center justify-between bg-blanc p-4 lg:hidden">
       <Link href={routes.home}>
-        <Image src="/images/logo-picto.svg" alt="Kasa - Accueil" width={46} height={53} priority />
+        <Image src="/images/logo-picto.svg" alt="Kasa - Accueil" width={46} height={53} />
       </Link>
 
       <button

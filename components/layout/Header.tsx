@@ -35,7 +35,7 @@ export default function Header() {
             </nav>
 
             <Link href={routes.home}>
-              <Image src="/images/logo.svg" alt="Kasa - Accueil" width={113} height={40} priority />
+              <Image src="/images/logo.svg" alt="Kasa - Accueil" width={113} height={40} />
             </Link>
 
             <div className="flex items-center gap-7">
