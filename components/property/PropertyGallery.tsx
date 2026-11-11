@@ -10,6 +10,10 @@ type PropertyGalleryProps = {
  * Galerie de la page logement (maquette) : la grande photo est un carrousel,
  * accompagnée des 4 photos suivantes en miniatures (affichage seul).
  * S'il n'y a qu'une photo, le carrousel prend toute la largeur.
+ *
+ * @param props.pictures - URLs des photos du logement.
+ * @param props.title - Nom du logement, utilisé pour les textes alternatifs.
+ * @returns La galerie.
  */
 export default function PropertyGallery({ pictures, title }: PropertyGalleryProps) {
   const thumbnails = pictures.slice(1, 5);

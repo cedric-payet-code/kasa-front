@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Retrouvez les logements que vous avez aimés sur Kasa.",
 };
 
+/**
+ * Page « Vos favoris » : récupère tous les logements côté serveur,
+ * puis `FavoritesList` n'affiche que ceux enregistrés en favoris.
+ *
+ * @returns La page des favoris.
+ */
 export default async function FavoritesPage() {
   const properties = await getProperties();
 

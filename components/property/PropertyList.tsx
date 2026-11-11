@@ -4,7 +4,10 @@ import PropertyGrid from "./PropertyGrid";
 
 /**
  * Liste de toutes les propriétés, récupérées côté serveur depuis l'API.
- * À envelopper dans un <Suspense> pour afficher un skeleton pendant le chargement.
+ * À envelopper dans un `<Suspense>` pour afficher un skeleton pendant le chargement.
+ *
+ * @returns La grille des logements, ou un message s'il n'y en a aucun.
+ * @throws {Error} Si l'API échoue (l'erreur est affichée par `app/error.tsx`).
  */
 export default async function PropertyList() {
   const properties = await getProperties();

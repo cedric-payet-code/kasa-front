@@ -1,6 +1,11 @@
 import PropertyGrid from "./PropertyGrid";
 
-/** Squelette affiché pendant le chargement de la liste des propriétés. */
+/**
+ * Squelette affiché pendant le chargement de la liste des propriétés.
+ *
+ * @param props.count - Nombre de cartes fantômes à afficher (6 par défaut).
+ * @returns Une grille de cartes grisées animées.
+ */
 export default function PropertyListSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div role="status" aria-label="Chargement des logements">

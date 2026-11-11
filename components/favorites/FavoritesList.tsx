@@ -10,6 +10,10 @@ import { useFavorites } from "./FavoritesProvider";
 /**
  * Liste des logements favoris. Les logements viennent de l'API (côté serveur),
  * le filtre se fait ici, côté navigateur, car les favoris sont dans le localStorage.
+ *
+ * @param props.properties - Tous les logements renvoyés par l'API.
+ * @returns La grille des favoris, un skeleton pendant la lecture des favoris,
+ * ou un message s'il n'y en a aucun.
  */
 export default function FavoritesList({ properties }: { properties: Property[] }) {
   const { favorites, isReady } = useFavorites();

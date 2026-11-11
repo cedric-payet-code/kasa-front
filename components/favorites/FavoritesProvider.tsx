@@ -20,8 +20,11 @@ const noopSubscribe = () => () => {};
 
 /**
  * Fournit les favoris à toute l'application (Context React).
- * Les favoris sont stockés dans le localStorage du navigateur, ils sont donc
+ * Les favoris sont stockés dans le localStorage du navigateur : ils sont donc
  * conservés quand on quitte le site et qu'on revient plus tard.
+ *
+ * @param props.children - Le reste de l'application.
+ * @returns Le provider du contexte des favoris.
  */
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const favorites = useSyncExternalStore(subscribe, getFavorites, getServerFavorites);
@@ -37,7 +40,15 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
 }
 
-/** Accès aux favoris depuis n'importe quel composant client. */
+/**
+ * Accès aux favoris depuis n'importe quel composant client.
+ *
+ * @returns Les favoris, `isFavorite`, `toggleFavorite` et `isReady`.
+ * @throws {Error} Si le hook est utilisé en dehors d'un `<FavoritesProvider>`.
+ *
+ * @example
+ * const { isFavorite, toggleFavorite } = useFavorites();
+ */
 export function useFavorites(): FavoritesContextValue {
   const context = useContext(FavoritesContext);
   if (!context) {

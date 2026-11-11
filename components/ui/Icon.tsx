@@ -55,7 +55,14 @@ type IconProps = Omit<SVGProps<SVGSVGElement>, "children"> & {
   label?: string;
 };
 
-/** Icône SVG de la maquette Kasa. Hérite de la couleur du texte (`currentColor`). */
+/**
+ * Icône SVG de la maquette Kasa. Hérite de la couleur du texte (`currentColor`).
+ *
+ * @param props.name - Nom de l'icône (ex. `"favoris"`, `"close"`).
+ * @param props.size - Taille en pixels (16 par défaut).
+ * @param props.label - Texte alternatif. Sans label, l'icône est décorative et masquée aux lecteurs d'écran.
+ * @returns L'élément `<svg>`.
+ */
 export default function Icon({ name, size = 16, label, ...props }: IconProps) {
   return (
     <svg

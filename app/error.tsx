@@ -2,7 +2,12 @@
 
 import Button from "@/components/ui/Button";
 
-/** Affichée si une page plante (ex. API injoignable). */
+/**
+ * Page affichée si une page plante (ex. API injoignable).
+ *
+ * @param props.reset - Fonction fournie par Next.js pour réessayer d'afficher la page.
+ * @returns Le message d'erreur et un bouton « Réessayer ».
+ */
 export default function Error({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <div className="mx-auto flex max-w-[742px] flex-col items-center gap-6 px-4 py-20 text-center">

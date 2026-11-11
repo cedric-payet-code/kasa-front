@@ -12,6 +12,11 @@ type FavoriteButtonProps = {
 /**
  * Bouton cœur de la carte logement (maquette : 32×32, fond gris clair).
  * Le cœur devient rouge quand le logement est en favori.
+ *
+ * @param props.propertyId - Id du logement à ajouter ou retirer des favoris.
+ * @param props.propertyTitle - Nom du logement, utilisé dans le libellé accessible.
+ * @param props.className - Classes CSS supplémentaires (ex. positionnement).
+ * @returns Un bouton bascule (`aria-pressed`).
  */
 export default function FavoriteButton({ propertyId, propertyTitle, className = "" }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites();

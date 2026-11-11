@@ -41,6 +41,19 @@ const variants = {
   secondary: "bg-gris-light text-gris-dark hover:text-noir",
 };
 
+/**
+ * Bouton « call to action » de la maquette.
+ *
+ * @param props.icon - Icône affichée avant le texte (ou seule, sans `children`).
+ * @param props.label - Libellé accessible, obligatoire pour un bouton icône seule.
+ * @param props.variant - `primary` (rouge, par défaut) ou `secondary` (gris clair).
+ * @param props.href - Si présent, le bouton est rendu comme un lien Next.js.
+ * @param props.children - Texte du bouton.
+ * @returns Un `<button>` ou un lien `<a>` stylé.
+ *
+ * @example
+ * <Button href="/" variant="secondary" icon="back">Retour aux annonces</Button>
+ */
 export default function Button(props: ButtonProps) {
   const { icon, label, variant = "primary", className = "", children } = props;
   const iconOnly = icon && !children;

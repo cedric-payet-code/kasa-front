@@ -7,7 +7,12 @@ import PropertyInfo from "@/components/property/PropertyInfo";
 import Button from "@/components/ui/Button";
 import { getPropertyBySlug } from "@/lib/api/properties";
 
-/** Titre et description de l'onglet, propres à chaque logement (SEO). */
+/**
+ * Titre, description et image de partage propres à chaque logement (SEO).
+ *
+ * @param props.params - Paramètres de l'URL, contenant le `slug` du logement.
+ * @returns Les métadonnées de la page.
+ */
 export async function generateMetadata({
   params,
 }: PageProps<"/logement/[slug]">): Promise<Metadata> {
@@ -26,6 +31,13 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Page détail d'un logement : galerie avec carrousel, informations et hôte.
+ * Affiche une 404 si aucun logement ne correspond au slug.
+ *
+ * @param props.params - Paramètres de l'URL, contenant le `slug` du logement.
+ * @returns La page du logement.
+ */
 export default async function PropertyPage({ params }: PageProps<"/logement/[slug]">) {
   const { slug } = await params;
   const property = await getPropertyBySlug(slug);

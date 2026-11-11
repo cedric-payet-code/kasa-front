@@ -15,7 +15,12 @@ const EMPTY: readonly string[] = Object.freeze([]);
 let cachedRaw: string | null = null;
 let cachedFavorites: readonly string[] = EMPTY;
 
-/** Lit la valeur brute dans localStorage (null si indisponible : navigation privée, serveur…). */
+/**
+ * Lit la valeur brute des favoris dans le localStorage.
+ *
+ * @returns La chaîne JSON enregistrée, ou `null` si rien n'est enregistré ou si le
+ * stockage est indisponible (navigation privée, rendu serveur…).
+ */
 function readRaw(): string | null {
   try {
     return window.localStorage.getItem(FAVORITES_STORAGE_KEY);
@@ -24,7 +29,13 @@ function readRaw(): string | null {
   }
 }
 
-/** Transforme la valeur brute en liste d'ids, en ignorant une donnée corrompue. */
+/**
+ * Transforme la valeur brute du localStorage en liste d'ids.
+ * Une donnée absente, mal formée ou d'un autre type donne une liste vide.
+ *
+ * @param raw - Valeur brute lue dans le localStorage.
+ * @returns La liste des ids favoris.
+ */
 function parse(raw: string | null): readonly string[] {
   if (!raw) return EMPTY;
   try {
@@ -35,7 +46,13 @@ function parse(raw: string | null): readonly string[] {
   }
 }
 
-/** Renvoie la liste des ids favoris enregistrés dans le navigateur. */
+/**
+ * Renvoie la liste des ids favoris enregistrés dans le navigateur.
+ * Tant que les données n'ont pas changé, la même référence est renvoyée
+ * (exigence de `useSyncExternalStore`).
+ *
+ * @returns Les ids des logements favoris.
+ */
 export function getFavorites(): readonly string[] {
   const raw = readRaw();
   if (raw !== cachedRaw) {
@@ -45,12 +62,21 @@ export function getFavorites(): readonly string[] {
   return cachedFavorites;
 }
 
-/** Valeur utilisée pendant le rendu serveur : le serveur ne connaît pas les favoris. */
+/**
+ * Valeur des favoris pendant le rendu serveur : le serveur n'a pas accès au
+ * localStorage, il considère donc qu'il n'y a aucun favori.
+ *
+ * @returns Une liste vide.
+ */
 export function getServerFavorites(): readonly string[] {
   return EMPTY;
 }
 
-/** Enregistre la liste des favoris et prévient les composants abonnés. */
+/**
+ * Enregistre la liste des favoris dans le localStorage et prévient les composants abonnés.
+ *
+ * @param favorites - Nouvelle liste complète des ids favoris.
+ */
 function saveFavorites(favorites: readonly string[]) {
   try {
     window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
@@ -60,7 +86,11 @@ function saveFavorites(favorites: readonly string[]) {
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-/** Ajoute l'id s'il n'est pas en favori, le retire sinon. */
+/**
+ * Ajoute un logement aux favoris, ou l'en retire s'il y est déjà.
+ *
+ * @param id - Identifiant du logement.
+ */
 export function toggleFavorite(id: string) {
   const favorites = getFavorites();
   saveFavorites(
@@ -69,8 +99,11 @@ export function toggleFavorite(id: string) {
 }
 
 /**
- * Abonne un composant aux changements des favoris :
- * dans cet onglet (CHANGE_EVENT) et dans les autres onglets (événement "storage").
+ * Abonne un composant aux changements des favoris, dans cet onglet
+ * (événement interne) comme dans les autres onglets (événement `storage`).
+ *
+ * @param onChange - Fonction appelée à chaque changement.
+ * @returns Une fonction qui annule l'abonnement.
  */
 export function subscribe(onChange: () => void) {
   const onStorage = (event: StorageEvent) => {

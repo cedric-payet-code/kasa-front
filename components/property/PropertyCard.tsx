@@ -9,7 +9,14 @@ type PropertyCardProps = {
   preload?: boolean;
 };
 
-/** Carte d'un logement dans la liste (composant « Card propriété » de la maquette). */
+/**
+ * Carte d'un logement dans une liste (composant « Card propriété » de la maquette).
+ * Toute la carte est cliquable et mène à la page détail.
+ *
+ * @param props.property - Logement à afficher.
+ * @param props.preload - Charge la photo en priorité (pour les cartes visibles sans scroller).
+ * @returns La carte du logement.
+ */
 export default function PropertyCard({ property, preload = false }: PropertyCardProps) {
   const { id, slug, title, location, cover, price_per_night } = property;
 

@@ -2,7 +2,12 @@ import Icon from "@/components/ui/Icon";
 import Tag from "@/components/ui/Tag";
 import type { PropertyDetail } from "@/lib/schemas/property";
 
-/** Bloc d'informations du logement : titre, lieu, description, équipements, catégories. */
+/**
+ * Bloc d'informations du logement : titre, lieu, description, équipements et catégories.
+ *
+ * @param props.property - Logement détaillé renvoyé par l'API.
+ * @returns Le bloc d'informations.
+ */
 export default function PropertyInfo({ property }: { property: PropertyDetail }) {
   const { title, location, description, equipments, tags } = property;
 

@@ -21,6 +21,12 @@ type CarouselProps = {
  * - hauteur fixe (donnée par le parent), images centrées et recadrées ;
  * - accessible au clavier (flèches gauche/droite quand le carrousel a le focus) ;
  * - pas de flèches lorsqu'il n'y a qu'une image.
+ *
+ * @param props.images - URLs des images à faire défiler.
+ * @param props.title - Nom du logement, utilisé pour les textes alternatifs.
+ * @param props.sizes - Valeur `sizes` transmise à next/image.
+ * @param props.className - Classes CSS supplémentaires, notamment la hauteur.
+ * @returns Le carrousel, ou un cadre gris vide s'il n'y a aucune image.
  */
 export default function Carousel({ images, title, sizes = "100vw", className = "" }: CarouselProps) {
   const [current, setCurrent] = useState(0);

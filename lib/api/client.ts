@@ -4,7 +4,17 @@ const API_URL = process.env.API_URL ?? "http://localhost:3000";
 
 /**
  * Appelle l'API Kasa et valide la réponse avec un schéma Zod.
- * Lève une erreur si la requête échoue ou si les données ne correspondent pas au schéma.
+ *
+ * @template T - Schéma Zod décrivant la forme attendue de la réponse.
+ * @param path - Chemin de la route, à partir de la racine de l'API (ex. `/api/properties`).
+ * @param schema - Schéma Zod utilisé pour valider le JSON reçu.
+ * @param init - Options passées à `fetch` (méthode, en-têtes, cache…).
+ * @returns Les données validées et typées d'après le schéma.
+ * @throws {Error} Si la réponse HTTP n'est pas un succès (statut hors 2xx).
+ * @throws {Error} Si les données reçues ne correspondent pas au schéma.
+ *
+ * @example
+ * const properties = await apiFetch("/api/properties", PropertyListSchema);
  */
 export async function apiFetch<T extends z.ZodType>(
   path: string,

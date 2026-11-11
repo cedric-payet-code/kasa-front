@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   description: "Location d'appartements et de maisons entre particuliers.",
 };
 
+/**
+ * Layout racine : police, fournisseur des favoris, header et footer communs à toutes les pages.
+ *
+ * @param props.children - La page affichée.
+ * @returns Le document HTML complet.
+ */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${inter.variable} h-full antialiased`}>

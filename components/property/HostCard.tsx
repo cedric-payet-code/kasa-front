@@ -8,7 +8,13 @@ type HostCardProps = {
   rating: number;
 };
 
-/** Encadré « Votre hôte » : photo, nom, note et actions de contact. */
+/**
+ * Encadré « Votre hôte » : photo, nom, note et actions de contact.
+ *
+ * @param props.host - Hôte du logement.
+ * @param props.rating - Note moyenne du logement, sur 5.
+ * @returns L'encadré de l'hôte.
+ */
 export default function HostCard({ host, rating }: HostCardProps) {
   const formattedRating = rating.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
 
