@@ -30,6 +30,10 @@ type CarouselProps = {
  */
 export default function Carousel({ images, title, sizes = "100vw", className = "" }: CarouselProps) {
   const [current, setCurrent] = useState(0);
+  // Photos déjà chargées : au départ seulement la première, pour ne pas ralentir
+  // l'affichage de la page. Les voisines sont chargées dès que le visiteur
+  // s'intéresse au carrousel (survol, focus) ou change de photo.
+  const [loaded, setLoaded] = useState<ReadonlySet<number>>(() => new Set([0]));
   const count = images.length;
   const hasMany = count > 1;
 
@@ -37,7 +41,18 @@ export default function Carousel({ images, title, sizes = "100vw", className = "
     return <div className={`rounded-[10px] bg-gris-light ${className}`} aria-hidden="true" />;
   }
 
-  const goTo = (index: number) => setCurrent((index + count) % count);
+  /** Marque comme à charger la photo `index` et ses deux voisines. */
+  const loadAround = (index: number) => {
+    const wanted = [index, index + 1, index - 1].map((i) => (i + count) % count);
+    if (wanted.every((i) => loaded.has(i))) return;
+    setLoaded((previous) => new Set([...previous, ...wanted]));
+  };
+
+  const goTo = (index: number) => {
+    const target = (index + count) % count;
+    loadAround(target);
+    setCurrent(target);
+  };
   const previous = () => goTo(current - 1);
   const next = () => goTo(current + 1);
 
@@ -58,6 +73,8 @@ export default function Carousel({ images, title, sizes = "100vw", className = "
       aria-label={`Photos du logement ${title}`}
       tabIndex={hasMany ? 0 : undefined}
       onKeyDown={onKeyDown}
+      onPointerEnter={hasMany ? () => loadAround(current) : undefined}
+      onFocus={hasMany ? () => loadAround(current) : undefined}
       className={`relative overflow-hidden rounded-[10px] bg-gris-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main-red ${className}`}
     >
       <div
@@ -76,15 +93,17 @@ export default function Carousel({ images, title, sizes = "100vw", className = "
               aria-hidden={!isCurrent}
               className="relative h-full w-full shrink-0"
             >
-              <Image
-                src={src}
-                alt={`${title} – photo ${index + 1}`}
-                fill
-                sizes={sizes}
-                className="object-cover object-center"
-                preload={index === 0}
-                fetchPriority={index === 0 ? "high" : undefined}
-              />
+              {loaded.has(index) && (
+                <Image
+                  src={src}
+                  alt={`${title} – photo ${index + 1}`}
+                  fill
+                  sizes={sizes}
+                  className="object-cover object-center"
+                  preload={index === 0}
+                  fetchPriority={index === 0 ? "high" : undefined}
+                />
+              )}
             </div>
           );
         })}

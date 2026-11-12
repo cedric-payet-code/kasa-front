@@ -1,12 +1,18 @@
-import { z } from "zod";
+import * as z from "zod/mini";
 
 /** Clé utilisée dans le localStorage du navigateur. */
 export const FAVORITES_STORAGE_KEY = "kasa:favorites";
 
+/**
+ * Format attendu dans le localStorage : une liste d'ids.
+ * On utilise « Zod Mini », la version allégée de Zod prévue pour le navigateur :
+ * même validation, mais seules les fonctions utilisées sont incluses dans le code
+ * envoyé au visiteur (quelques Ko au lieu d'environ 100 Ko pour Zod complet).
+ */
+const FavoritesSchema = z.array(z.string());
+
 /** Événement émis quand les favoris changent dans cet onglet. */
 const CHANGE_EVENT = "kasa:favorites-change";
-
-const FavoritesSchema = z.array(z.string());
 
 const EMPTY: readonly string[] = Object.freeze([]);
 

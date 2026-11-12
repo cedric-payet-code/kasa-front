@@ -83,6 +83,17 @@ describe("Carousel", () => {
     expect(currentSlide()).toBe(3);
   });
 
+  it("ne charge que la première photo au départ, puis les suivantes à la navigation", async () => {
+    const user = userEvent.setup();
+    render(<Carousel images={images} title="Appartement cosy" />);
+    expect(screen.getAllByRole("img", { hidden: true })).toHaveLength(1);
+
+    await user.click(screen.getByRole("button", { name: "Photo suivante" }));
+    expect(
+      screen.getByRole("img", { name: "Appartement cosy – photo 2", hidden: true }),
+    ).toBeInTheDocument();
+  });
+
   it("n'affiche rien de cassé quand il n'y a aucune photo", () => {
     render(<Carousel images={[]} title="Vide" />);
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
