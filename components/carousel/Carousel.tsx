@@ -11,6 +11,10 @@ type CarouselProps = {
   title: string;
   /** Valeur `sizes` transmise à next/image. */
   sizes?: string;
+  /** Index de la photo affichée au départ (0 par défaut). */
+  initialIndex?: number;
+  /** Charge la première photo en priorité (si le carrousel est visible dès l'arrivée sur la page). */
+  priority?: boolean;
   className?: string;
 };
 
@@ -25,15 +29,24 @@ type CarouselProps = {
  * @param props.images - URLs des images à faire défiler.
  * @param props.title - Nom du logement, utilisé pour les textes alternatifs.
  * @param props.sizes - Valeur `sizes` transmise à next/image.
+ * @param props.initialIndex - Index de la photo affichée au départ.
+ * @param props.priority - Charge la photo de départ en priorité.
  * @param props.className - Classes CSS supplémentaires, notamment la hauteur.
  * @returns Le carrousel, ou un cadre gris vide s'il n'y a aucune image.
  */
-export default function Carousel({ images, title, sizes = "100vw", className = "" }: CarouselProps) {
-  const [current, setCurrent] = useState(0);
-  // Photos déjà chargées : au départ seulement la première, pour ne pas ralentir
+export default function Carousel({
+  images,
+  title,
+  sizes = "100vw",
+  initialIndex = 0,
+  priority = false,
+  className = "",
+}: CarouselProps) {
+  const [current, setCurrent] = useState(initialIndex);
+  // Photos déjà chargées : au départ seulement celle affichée, pour ne pas ralentir
   // l'affichage de la page. Les voisines sont chargées dès que le visiteur
   // s'intéresse au carrousel (survol, focus) ou change de photo.
-  const [loaded, setLoaded] = useState<ReadonlySet<number>>(() => new Set([0]));
+  const [loaded, setLoaded] = useState<ReadonlySet<number>>(() => new Set([initialIndex]));
   const count = images.length;
   const hasMany = count > 1;
 
@@ -100,8 +113,8 @@ export default function Carousel({ images, title, sizes = "100vw", className = "
                   fill
                   sizes={sizes}
                   className="object-cover object-center"
-                  preload={index === 0}
-                  fetchPriority={index === 0 ? "high" : undefined}
+                  preload={priority && index === initialIndex}
+                  fetchPriority={priority && index === initialIndex ? "high" : undefined}
                 />
               )}
             </div>

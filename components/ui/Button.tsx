@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { prefetchFor } from "@/components/layout/navigation";
 import Icon, { type IconName } from "./Icon";
 
 /**
@@ -76,7 +77,12 @@ export default function Button(props: ButtonProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { icon: _i, label: _l, variant: _v, className: _c, children: _ch, ...rest } = props;
     return (
-      <Link {...rest} className={classes} aria-label={iconOnly ? label : undefined}>
+      <Link
+        prefetch={prefetchFor(rest.href)}
+        {...rest}
+        className={classes}
+        aria-label={iconOnly ? label : undefined}
+      >
         {content}
       </Link>
     );

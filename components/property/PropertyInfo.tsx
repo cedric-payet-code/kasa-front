@@ -1,9 +1,11 @@
+import Collapse from "@/components/ui/Collapse";
 import Icon from "@/components/ui/Icon";
 import Tag from "@/components/ui/Tag";
 import type { PropertyDetail } from "@/lib/schemas/property";
 
 /**
- * Bloc d'informations du logement : titre, lieu, description, équipements et catégories.
+ * Bloc d'informations du logement : titre, lieu, description, puis équipements
+ * et catégories dans des sections repliables (collapses du backlog).
  *
  * @param props.property - Logement détaillé renvoyé par l'API.
  * @returns Le bloc d'informations.
@@ -27,10 +29,7 @@ export default function PropertyInfo({ property }: { property: PropertyDetail })
       </div>
 
       {equipments.length > 0 && (
-        <section aria-labelledby="equipments-title" className="flex flex-col gap-4">
-          <h2 id="equipments-title" className="text-sm font-medium text-black">
-            Équipements
-          </h2>
+        <Collapse title="Équipements">
           <ul className="flex max-w-[316px] flex-wrap gap-2">
             {equipments.map((equipment) => (
               <li key={equipment}>
@@ -38,14 +37,11 @@ export default function PropertyInfo({ property }: { property: PropertyDetail })
               </li>
             ))}
           </ul>
-        </section>
+        </Collapse>
       )}
 
       {tags.length > 0 && (
-        <section aria-labelledby="tags-title" className="flex flex-col gap-[15px]">
-          <h2 id="tags-title" className="text-sm font-medium text-black">
-            Catégorie
-          </h2>
+        <Collapse title="Catégorie">
           <ul className="flex flex-wrap gap-[18px]">
             {tags.map((tag) => (
               <li key={tag}>
@@ -53,7 +49,7 @@ export default function PropertyInfo({ property }: { property: PropertyDetail })
               </li>
             ))}
           </ul>
-        </section>
+        </Collapse>
       )}
     </div>
   );
