@@ -76,6 +76,7 @@ cp .env.example .env.local
 | Variable | Description | Valeur par défaut |
 |---|---|---|
 | `API_URL` | URL de l'API Express | `http://localhost:3000` |
+| `USE_MOCK_DATA` | `true` pour utiliser les données mockées au lieu de l'API | `false` |
 
 ## Lancement du projet
 
@@ -101,6 +102,22 @@ Le site est alors accessible sur **http://localhost:3001**.
 
 > Le front-end tourne sur le port **3001** car l'API utilise déjà le port 3000.
 
+### Lancer sans le back-end (données mockées)
+
+Le dossier `lib/mocks/` contient une copie des 20 logements de l'API. Pour lancer le front-end sans le back-end, passer la variable à `true` dans `.env.local` :
+
+```bash
+USE_MOCK_DATA=true
+```
+
+C'est ce mode qui est utilisé pour le site déployé, le back-end n'étant pas en ligne.
+
+## Déploiement (Vercel)
+
+1. Importer le dépôt GitHub sur [Vercel](https://vercel.com/new) (framework détecté automatiquement : Next.js).
+2. Dans *Settings → Environment Variables*, ajouter `USE_MOCK_DATA` = `true`.
+3. Déployer : chaque push sur `master` redéploie automatiquement le site.
+
 ## Scripts disponibles
 
 | Commande | Rôle |
@@ -117,6 +134,7 @@ Le site est alors accessible sur **http://localhost:3001**.
 Les tests unitaires portent sur les deux fonctionnalités clés :
 
 - **Carrousel** (`components/carousel/Carousel.test.tsx`) : image affichée au départ, navigation avec les flèches, boucle dans les deux sens, navigation au clavier, absence de flèches avec une seule image, cas sans image.
+- **Données mockées** (`lib/mocks/properties.test.ts`) : format de la liste et du détail, erreur pour un id inconnu.
 - **Favoris** (`components/favorites/favorites.test.tsx`) : ajout et retrait, enregistrement dans le `localStorage`, relecture des favoris au retour sur le site, donnée corrompue ignorée, synchronisation des boutons d'un même logement.
 
 ```bash
@@ -143,6 +161,7 @@ kasa-front/
 ├── lib/
 │   ├── api/                  # Appels à l'API (client + service des propriétés)
 │   ├── favorites/            # Stockage des favoris dans le localStorage
+│   ├── mocks/                # Données mockées (copie de l'API) pour le déploiement
 │   └── schemas/              # Schémas Zod et types des données de l'API
 └── public/images/            # Logos et photo du bandeau
 ```

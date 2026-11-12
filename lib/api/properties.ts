@@ -5,26 +5,37 @@ import {
   type Property,
   type PropertyDetail,
 } from "@/lib/schemas/property";
+import { getMockProperties, getMockPropertyById } from "@/lib/mocks/properties";
 import { apiFetch } from "./client";
 
 /**
+ * `true` quand la variable d'environnement `USE_MOCK_DATA` vaut `"true"` :
+ * les données viennent alors de `lib/mocks/properties.json` au lieu de l'API.
+ */
+const useMockData = process.env.USE_MOCK_DATA === "true";
+
+/**
  * Récupère la liste de toutes les propriétés, sans cache (toujours à jour).
+ * Avec `USE_MOCK_DATA=true`, renvoie les données mockées au lieu d'appeler l'API.
  *
  * @returns La liste des propriétés, au format résumé (sans photos, équipements ni tags).
  * @throws {Error} Si l'API est injoignable ou renvoie des données invalides.
  */
 export function getProperties(): Promise<Property[]> {
+  if (useMockData) return getMockProperties();
   return apiFetch("/api/properties", PropertyListSchema, { cache: "no-store" });
 }
 
 /**
  * Récupère le détail complet d'une propriété à partir de son id.
+ * Avec `USE_MOCK_DATA=true`, renvoie les données mockées au lieu d'appeler l'API.
  *
  * @param id - Identifiant de la propriété (ex. `"c67ab8a7"`).
  * @returns La propriété avec ses photos, équipements et tags.
  * @throws {Error} Si la propriété n'existe pas (404) ou si l'API renvoie des données invalides.
  */
 export function getPropertyById(id: string): Promise<PropertyDetail> {
+  if (useMockData) return getMockPropertyById(id);
   return apiFetch(`/api/properties/${encodeURIComponent(id)}`, PropertyDetailSchema, {
     cache: "no-store",
   });
