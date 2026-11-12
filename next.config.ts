@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // Les métadonnées (title, description…) sont toujours placées dans le <head>
+  // avant l'envoi de la page, pour tous les visiteurs et robots (SEO, Lighthouse).
+  htmlLimitedBots: /.*/,
   images: {
     // Photos des logements servies par le S3 d'OpenClassrooms (URLs renvoyées par l'API)
     remotePatterns: [

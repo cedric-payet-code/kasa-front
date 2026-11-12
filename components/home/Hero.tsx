@@ -22,6 +22,7 @@ export default function Hero() {
           placeholder="blur"
           className="object-cover"
           preload
+          fetchPriority="high"
         />
       </div>
     </section>

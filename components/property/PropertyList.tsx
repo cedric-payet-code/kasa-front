@@ -18,9 +18,9 @@ export default async function PropertyList() {
 
   return (
     <PropertyGrid>
-      {properties.map((property, index) => (
+      {properties.map((property) => (
         <li key={property.id}>
-          <PropertyCard property={property} preload={index < 3} />
+          <PropertyCard property={property} />
         </li>
       ))}
     </PropertyGrid>

@@ -18,7 +18,7 @@ export async function generateMetadata({
 }: PageProps<"/logement/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const property = await getPropertyBySlug(slug);
-  if (!property) return { title: "Logement introuvable" };
+  if (!property) notFound();
 
   return {
     title: property.title,

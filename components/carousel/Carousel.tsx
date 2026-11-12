@@ -83,6 +83,7 @@ export default function Carousel({ images, title, sizes = "100vw", className = "
                 sizes={sizes}
                 className="object-cover object-center"
                 preload={index === 0}
+                fetchPriority={index === 0 ? "high" : undefined}
               />
             </div>
           );

@@ -60,7 +60,7 @@ npm install
 ### 2. Le front-end (ce dépôt)
 
 ```bash
-git clone <url-de-ce-dépôt> kasa-front
+git clone https://github.com/cedric-payet-code/kasa-front.git kasa-front
 cd kasa-front
 npm install
 ```
