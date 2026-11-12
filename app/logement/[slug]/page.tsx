@@ -4,6 +4,7 @@ import { routes } from "@/components/layout/navigation";
 import HostCard from "@/components/property/HostCard";
 import PropertyGallery from "@/components/property/PropertyGallery";
 import PropertyInfo from "@/components/property/PropertyInfo";
+import PropertyJsonLd from "@/components/seo/PropertyJsonLd";
 import Button from "@/components/ui/Button";
 import { getPropertyBySlug } from "@/lib/api/properties";
 
@@ -45,6 +46,7 @@ export default async function PropertyPage({ params }: PageProps<"/logement/[slu
 
   return (
     <div className="mx-auto flex max-w-[1003px] flex-col gap-6 px-4 pt-2.5 pb-10 lg:pt-10">
+      <PropertyJsonLd property={property} />
       <div className="lg:border-b lg:border-gris-light lg:px-[7px] lg:py-4">
         <Button href={routes.home} variant="secondary" icon="back" className="px-4">
           Retour aux annonces

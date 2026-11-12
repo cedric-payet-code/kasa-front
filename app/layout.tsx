@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { FavoritesProvider } from "@/components/favorites/FavoritesProvider";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,6 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  // Base des URL absolues (balises de partage Open Graph, etc.)
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Kasa",
     template: "%s | Kasa",

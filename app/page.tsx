@@ -15,7 +15,7 @@ export default function Home() {
     <div className="mx-auto flex max-w-[1147px] flex-col gap-10 px-4 py-10">
       <Hero />
 
-      <section aria-label="Nos logements">
+      <section id="logements" aria-label="Nos logements" className="scroll-mt-6">
         <Suspense fallback={<PropertyListSkeleton />}>
           <PropertyList />
         </Suspense>
