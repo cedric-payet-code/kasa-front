@@ -10,5 +10,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    // Les tests Cypress (cypress/) ne sont pas lancés par Vitest.
+    exclude: ["**/node_modules/**", "cypress/**"],
   },
 });

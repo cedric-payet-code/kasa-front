@@ -128,6 +128,8 @@ C'est ce mode qui est utilisé pour le site déployé, le back-end n'étant pas 
 | `npm run lint` | Vérifie le code avec ESLint |
 | `npm test` | Lance les tests unitaires en mode surveillance |
 | `npx vitest run` | Lance les tests unitaires une seule fois |
+| `npm run cypress:open` | Ouvre l'interface de Cypress (tests end-to-end) |
+| `npm run cypress:run` | Lance tous les tests end-to-end dans le terminal |
 
 ## Tests
 
@@ -140,6 +142,24 @@ Les tests unitaires portent sur les deux fonctionnalités clés :
 ```bash
 npx vitest run
 ```
+
+### Tests end-to-end (Cypress)
+
+Un test end-to-end (`cypress/e2e/favorites.cy.ts`) rejoue dans un vrai navigateur l'ajout d'un logement aux favoris : clic sur le cœur, rechargement de la page, puis vérification dans « Vos favoris ».
+
+Le site doit tourner sur http://localhost:3001 avant de lancer les tests :
+
+```bash
+# terminal 1 : le site, avec les données mockées (pas besoin de l'API)
+USE_MOCK_DATA=true npm run build
+USE_MOCK_DATA=true npm start
+
+# terminal 2 : les tests
+npm run cypress:run      # dans le terminal
+npm run cypress:open     # ou avec l'interface graphique
+```
+
+> Sous Windows (PowerShell), définir la variable avec `$env:USE_MOCK_DATA="true"` avant les commandes, ou passer `USE_MOCK_DATA=true` dans `.env.local`.
 
 ## Structure du projet
 
@@ -158,6 +178,7 @@ kasa-front/
 │   ├── layout/               # Header, menu mobile, footer, navigation
 │   ├── property/             # Cartes, grille, galerie, infos, hôte
 │   └── ui/                   # Composants réutilisables : Button, Icon, Tag
+├── cypress/                  # Test end-to-end (ajout d'un favori)
 ├── lib/
 │   ├── api/                  # Appels à l'API (client + service des propriétés)
 │   ├── favorites/            # Stockage des favoris dans le localStorage

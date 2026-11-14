@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { getFavorites, getServerFavorites, subscribe, toggleFavorite } from "@/lib/favorites/store";
 
 type FavoritesContextValue = {
@@ -29,6 +37,12 @@ const noopSubscribe = () => () => {};
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const favorites = useSyncExternalStore(subscribe, getFavorites, getServerFavorites);
   const isReady = useSyncExternalStore(noopSubscribe, () => true, () => false);
+
+  // Signale que React a pris la main sur la page (hydratation terminée) :
+  // les tests end-to-end (Cypress) attendent ce marqueur avant d'interagir.
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = "true";
+  }, []);
 
   const isFavorite = useCallback((id: string) => favorites.includes(id), [favorites]);
 

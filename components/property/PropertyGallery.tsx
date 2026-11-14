@@ -32,7 +32,7 @@ export default function PropertyGallery({ pictures, title }: PropertyGalleryProp
   }
 
   const buttonClasses =
-    "group relative block h-full w-full cursor-zoom-in overflow-hidden rounded-[10px] bg-gris-light " +
+    "group relative block w-full cursor-zoom-in overflow-hidden rounded-[10px] bg-gris-light " +
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main-red";
   const imageClasses = "object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none";
 
@@ -66,7 +66,7 @@ export default function PropertyGallery({ pictures, title }: PropertyGalleryProp
                     type="button"
                     onClick={() => setOpenIndex(index)}
                     aria-label={`Agrandir la photo ${index + 1} sur ${pictures.length} de ${title}`}
-                    className={buttonClasses}
+                    className={`${buttonClasses} h-full`}
                   >
                     <Image
                       src={src}
