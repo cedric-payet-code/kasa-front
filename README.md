@@ -112,11 +112,27 @@ USE_MOCK_DATA=true
 
 C'est ce mode qui est utilisé pour le site déployé, le back-end n'étant pas en ligne.
 
-## Déploiement (Vercel)
+## Intégration et déploiement continus (CI/CD)
 
-1. Importer le dépôt GitHub sur [Vercel](https://vercel.com/new) (framework détecté automatiquement : Next.js).
-2. Dans *Settings → Environment Variables*, ajouter `USE_MOCK_DATA` = `true`.
-3. Déployer : chaque push sur `master` redéploie automatiquement le site.
+Une pipeline GitHub Actions (`.github/workflows/ci-cd.yml`) se lance à chaque push sur `master` et à chaque pull request :
+
+1. **CI** : ESLint → tests unitaires (Vitest) → build de production → test end-to-end (Cypress), avec les données mockées.
+2. **CD** : sur `master` uniquement, et **seulement si toutes les étapes précédentes ont réussi**, le site est mis en production sur [Vercel](https://vercel.com).
+
+Le déploiement automatique propre à Vercel est désactivé (`vercel.json`) : c'est la pipeline qui déploie, après les tests.
+
+### Configuration (une seule fois)
+
+1. **Vercel** : créer le projet (import du dépôt GitHub), puis dans *Settings → Environment Variables*, ajouter `USE_MOCK_DATA` = `true` pour l'environnement *Production*.
+2. **Identifiants du projet** : dans le dossier du projet, lancer `npx vercel link`. Le fichier `.vercel/project.json` (non versionné) contient `orgId` et `projectId`.
+3. **Jeton** : en créer un sur [vercel.com/account/tokens](https://vercel.com/account/tokens).
+4. **GitHub** : dans *Settings → Secrets and variables → Actions* du dépôt, ajouter trois secrets :
+
+| Secret | Valeur |
+|---|---|
+| `VERCEL_TOKEN` | le jeton créé à l'étape 3 |
+| `VERCEL_ORG_ID` | `orgId` de `.vercel/project.json` |
+| `VERCEL_PROJECT_ID` | `projectId` de `.vercel/project.json` |
 
 ## Scripts disponibles
 

@@ -1,0 +1,86 @@
+# Pipeline CI/CD
+# - À chaque push sur master et à chaque pull request : vérification et tests (CI).
+# - Sur master uniquement, si tous les tests passent : mise en production sur Vercel (CD).
+# Le site utilise les données mockées (USE_MOCK_DATA), le back-end n'étant pas en ligne.
+name: CI/CD
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # CI : vérification du code et tests
+  # ---------------------------------------------------------------------------
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    env:
+      USE_MOCK_DATA: "true"
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Vérifier le code (ESLint)
+        run: npm run lint
+
+      - name: Tests unitaires (Vitest)
+        run: npx vitest run
+
+      - name: Build de production
+        run: npm run build
+
+      - name: Test end-to-end (Cypress)
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          start: npm start
+          wait-on: http://localhost:3001
+
+  # ---------------------------------------------------------------------------
+  # CD : mise en production sur Vercel, seulement si les tests ont réussi
+  # ---------------------------------------------------------------------------
+  deploy:
+    name: Mise en production
+    needs: tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer l'outil Vercel
+        run: npm install --global vercel@latest
+
+      - name: Récupérer la configuration du projet Vercel (dont USE_MOCK_DATA)
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Construire le site pour Vercel
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Déployer en production
+        id: deploy
+        run: echo "url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})" >> "$GITHUB_OUTPUT"
