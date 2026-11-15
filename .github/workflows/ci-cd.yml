@@ -46,7 +46,11 @@ jobs:
         with:
           install: false
           start: npm start
-          wait-on: http://localhost:3001
+          # 127.0.0.1 plutôt que localhost : sur les machines GitHub, « localhost »
+          # peut désigner l'adresse IPv6 (::1), sur laquelle Next.js n'écoute pas.
+          wait-on: http://127.0.0.1:3001
+          wait-on-timeout: 120
+          config: baseUrl=http://127.0.0.1:3001
 
   # ---------------------------------------------------------------------------
   # CD : mise en production sur Vercel, seulement si les tests ont réussi
