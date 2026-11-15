@@ -41,16 +41,23 @@ jobs:
       - name: Build de production
         run: npm run build
 
+      - name: Démarrer le site (en arrière-plan)
+        run: npm start > server.log 2>&1 &
+
+      - name: Attendre que le site réponde
+        run: |
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3001 > /dev/null && echo "Site prêt" && exit 0
+            sleep 2
+          done
+          echo "Le site n'a pas démarré en 2 minutes" && exit 1
+
       - name: Test end-to-end (Cypress)
-        uses: cypress-io/github-action@v6
-        with:
-          install: false
-          start: npm start
-          # 127.0.0.1 plutôt que localhost : sur les machines GitHub, « localhost »
-          # peut désigner l'adresse IPv6 (::1), sur laquelle Next.js n'écoute pas.
-          wait-on: http://127.0.0.1:3001
-          wait-on-timeout: 120
-          config: baseUrl=http://127.0.0.1:3001
+        run: npx cypress run --config baseUrl=http://127.0.0.1:3001
+
+      - name: Afficher les logs du serveur (en cas d'échec)
+        if: failure()
+        run: cat server.log
 
   # ---------------------------------------------------------------------------
   # CD : mise en production sur Vercel, seulement si les tests ont réussi
